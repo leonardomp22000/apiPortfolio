@@ -72,6 +72,11 @@ import cv2
 import numpy as np
 import base64
 import json
+import mediapipe as mp
+
+mpHands = mp.solutions.hands
+hands = mpHands.Hands()
+mpDraw = mp.solutions.drawing_utils
 
 while True:
     # Leer el frame desde stdin
@@ -86,10 +91,18 @@ while True:
         frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
         # Procesamiento con OpenCV (Ejemplo: convertir a escala de grises)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Redimensionar la imagen a un cuadrado de 256x256 antes de procesarla
+        #frame = cv2.resize(frame, (256, 256))
+
+        imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = hands.process(imgRGB)
+
+        if results.multi_hand_landmarks:
+            for handLms in results.multi_hand_landmarks:
+                mpDraw.draw_landmarks(frame, handLms, mpHands.HAND_CONNECTIONS)
 
         # Codificar la imagen procesada
-        _, buffer = cv2.imencode(".jpg", gray)
+        _, buffer = cv2.imencode(".jpg", frame)
         processed_img = base64.b64encode(buffer).decode("utf-8")
 
         # Enviar JSON estructurado

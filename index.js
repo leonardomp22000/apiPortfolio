@@ -32,6 +32,8 @@ const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { spawn } = require("child_process");
+require("dotenv").config();
+const port = process.env.PORT || 5000;
 
 const app = express();
 const server = createServer(app);
@@ -87,6 +89,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5000, () => {
+server.listen(port, () => {
   console.log("Servidor corriendo en http://localhost:5000");
 });
