@@ -40,7 +40,8 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
-const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://127.0.0.1:5001"; // http://127.0.0.1:5001
+const PYTHON_API_URL =
+  process.env.PYTHON_API_URL || "https://pythonopencvserve.onrender.com"; // http://127.0.0.1:5001
 
 io.on("connection", (socket) => {
   console.log("Cliente conectado");
